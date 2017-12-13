@@ -8,7 +8,6 @@
 
 import sys
 from math import *  # 输入的表达式可使用math模块中所有数学函数，如sin、cos
-from PyQt5.QtCore import *  # 显示个时间戳
 from PyQt5.QtWidgets import *   # 使用此模块中的QWidget，QTextBrowser、QLineEdit
 
 # 通过QDialog子类化的方法创建一个顶级窗口
@@ -32,21 +31,24 @@ class Form(QDialog):
         self.setLayout(layout)
 
         self.lineedit.setFocus()
+
+        # 信号（returnPressed）连接到槽（updateUi)
+        # 当用户在lineedit上按下回车键时，retrunPressed信号就会发射出来，
+        # 因有connect , 此时会调用updateUi().
         self.lineedit.returnPressed.connect(self.updateUi)
 
         self.setWindowTitle("Calculate")
 
     def updateUi(self):
         try:
-            t = QTime.currentTime()
             text = self.lineedit.text()
-            self.browser.append("{} => {} = <b>{}</b>".format(t.toString(),text,
-                                eval(text)))
+
+            # 使用eval函数计算表达式的值
+            self.browser.append("{} = <b>{}</b>".format(text,eval(text)))
         except:
-            self.browser.append("<font color=red>{} is invalid!</font>"
-                                .format(text))
+            self.browser.append("<font color=red>{} is invalid!</font>".format(text))
 
 app = QApplication(sys.argv)
-form = Form()
-form.show()
+form = Form()   # 创建Form实例
+form.show()     # 调用了show()后，事件循环开始，显示出窗口
 app.exec_()
