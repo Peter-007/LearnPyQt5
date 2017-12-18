@@ -48,7 +48,8 @@ class Form(QDialog):
         except:
             self.browser.append("<font color=red>{} is invalid!</font>".format(text))
 
-app = QApplication(sys.argv)
-form = Form()   # 创建Form实例
-form.show()     # 调用了show()后，事件循环开始，显示出窗口
-app.exec_()
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    form = Form()   # 创建Form实例
+    form.show()
+    app.exec_()     # 调用了show()后，事件循环开始，显示出窗口
